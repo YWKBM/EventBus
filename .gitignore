@@ -1,0 +1,9 @@
+/.vscode
+**/bin
+**/obj
+**/appsettings.Development.json
+/.pack
+*.idea
+*.user
+
+
