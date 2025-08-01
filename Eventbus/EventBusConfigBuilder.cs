@@ -28,9 +28,8 @@ public class EventBusConfigBuilder
         services.AddSingleton(builder.config);
 
         services.AddSingleton<EventBusChannelPool>();
-        // 
-        // services.AddEventbus (Send)
-
+        services.AddScoped<IEventBus, EventBus>();
+        
         return builder;
     }
 }
