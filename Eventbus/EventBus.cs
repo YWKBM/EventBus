@@ -15,8 +15,7 @@ internal class EventBus(
         channel ??= await channelPool.CreateChanelAsync();
         return channel;
     }
-
-
+    
     public async Task Send(string? queue, string routingKey, ReadOnlyMemory<byte> message)
     {
         var properties = new BasicProperties()

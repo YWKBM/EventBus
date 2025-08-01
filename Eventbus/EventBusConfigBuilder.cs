@@ -7,7 +7,7 @@ public class EventBusConfigBuilder
     private readonly EventBusConfig config;
     private readonly IServiceCollection services;
     
-    public EventBusConfigBuilder(IServiceCollection services, Uri uri, string? exchangeName)
+    private EventBusConfigBuilder(IServiceCollection services, Uri uri, string? exchangeName)
     {
         this.services = services;
 
@@ -29,7 +29,32 @@ public class EventBusConfigBuilder
 
         services.AddSingleton<EventBusChannelPool>();
         services.AddScoped<IEventBus, EventBus>();
+        services.AddHostedService<EventBusHostedService>();
         
         return builder;
+    }
+
+    public EventBusConfigBuilder AddConsumer<T>(string queue, params string[] routingKeys)
+    where T : class, IAsyncConsumer
+    {
+        services.AddScoped<T>();
+        var consumer = new EventBusConfig.ConsumerConfig()
+        {
+            Consumer = typeof(T),
+            Queue = queue,
+            RoutingKeys = routingKeys,
+            AutoDelete = false
+        };
+        config.ConsumerHandlers.Add(consumer);
+
+        return this;
+    }
+
+    public EventBusConfigBuilder AddReadyHandler<T>()
+    where T : class, IAsyncReadyHandler
+    {
+        services.AddScoped<IAsyncReadyHandler, T>();
+
+        return this;
     }
 }
