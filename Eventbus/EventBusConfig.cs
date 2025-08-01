@@ -8,7 +8,9 @@ internal record EventBusConfig
         
         public required string Queue { get; set; }
         
-        public required string RoutingKeys { get; set; }
+        public required string[] RoutingKeys { get; set; }
+        
+        public required bool AutoDelete { get; set; }
     }
     
     public const string DefaultExchangeName = "eventbus";
